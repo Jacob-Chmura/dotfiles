@@ -1,0 +1,79 @@
+[
+    {
+        "key": "a",
+        "command": "explorer.newFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "d",
+        "command": "explorer.newFolder",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "r",
+        "command": "renameFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "x",
+        "command": "filesExplorer.cut",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "y",
+        "command": "filesExplorer.copy",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "p",
+        "command": "filesExplorer.paste",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourseIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.quickOpenSelectNext",
+        "when": "inQuickOpen"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.quickOpenSelectPrevious",
+        "when": "inQuickOpen"
+    },
+    {
+        "key": "ctrl+n",
+        "command": "explorer.newFile"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "workbench.files.action.showActiveFileInExplorer",
+        "when": "!sideBarVisible"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "workbench.action.closeSidebar",
+        "when": "sideBarVisible"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.terminal.kill",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+.",
+        "command": "workbench.action.terminal.new",
+        "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+    },
+    {
+        "key": "ctrl+shift+\\",
+        "command": "workbench.action.terminal.split",
+        "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
+    },
+    {
+        "key": "ctrl+g g",
+        "command": "workbench.view.scm"
+    },
+    {
+        "key": "ctrl+]",
+        "command": "workbench.action.splitEditorDown"
+    }
+]

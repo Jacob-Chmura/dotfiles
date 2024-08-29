@@ -1,0 +1,145 @@
+{
+    "editor.cursorSurroundingLines": 8,
+    "editor.folding": false,
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Noto Mono",
+    "editor.formatOnSave": true,
+    "editor.lineNumbers": "relative",
+    "editor.minimap.enabled": false,
+    "editor.mouseWheelZoom": true,
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "hidden",
+    "files.autoSave": "afterDelay",
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": false,
+    "search.showLineNumbers": true,
+    "terminal.integrated.defaultLocation": "editor",
+    "window.menuBarVisibility": "compact",
+    "window.newWindowDimensions": "fullscreen",
+    "window.restoreFullscreen": true,
+    "window.titleBarStyle": "custom",
+    "window.zoomLevel": 1,
+    "workbench.activityBar.location": "hidden",
+    "workbench.colorCustomizations": {
+        "sideBar.background": "#181818",
+        "editor.background": "#181818",
+        "titleBar.activeBackground": "#181818"
+    },
+    "workbench.colorTheme": "Gruber Darker",
+    "workbench.layoutControl.enabled": false,
+    "workbench.sideBar.location": "right",
+    "workbench.startupEditor": "none",
+    "vim.highlightedyank.color": "#a9dc7660",
+    "vim.highlightedyank.duration": 250,
+    "vim.highlightedyank.enable": true,
+    "vim.smartRelativeLine": true,
+    "vim.useSystemClipboard": true,
+    "vim.vimrc.enable": true,
+    "vim.handleKeys": {
+        "<C-w>": false,
+        "<C-p>": false,
+        "<C-g>": false,
+    },
+    "vim.normalModeKeyBindings": [
+        {
+            "before": [
+                "g",
+                "p",
+                "d"
+            ],
+            "commands": [
+                "editor.action.peekDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "i"
+            ],
+            "commands": [
+                "editor.action.peekImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "editor.action.showDefinitionPreviewHover"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "i"
+            ],
+            "commands": [
+                "editor.action.goToImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "t"
+            ],
+            "commands": [
+                "editor.action.goToTypeDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "t"
+            ],
+            "commands": [
+                "editor.action.peekTypeDefinition"
+            ]
+        }
+    ],
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "k",
+                "j"
+            ],
+            "after": [
+                "<esc>"
+            ]
+        },
+        {
+            "before": [
+                "ctrl+h"
+            ],
+            "after": [
+                "<Left>"
+            ],
+        },
+        {
+            "before": [
+                "ctrl+l"
+            ],
+            "after": [
+                "<Right>"
+            ],
+        },
+        {
+            "before": [
+                "ctrl+k"
+            ],
+            "after": [
+                "<Up>"
+            ],
+        },
+        {
+            "before": [
+                "ctrl+j"
+            ],
+            "after": [
+                "<Down>"
+            ],
+        }
+    ]
+}
