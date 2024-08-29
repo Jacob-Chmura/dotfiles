@@ -1,0 +1,27 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# History management
+HISTCONTROL=ignoreboth
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# Colors
+export TERM=xterm-256color
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+fish
