@@ -1,0 +1,34 @@
+[user]
+	email = jacobpaul.chmura@gmail.com
+	name = Jacob-Chmura
+[item]
+	defaultBranch = master
+[ui "color"]
+	ui = always
+[color]
+	ui = true
+[alias]
+	s = status --short --branch
+  a = add
+	c = commit
+	ca = commit --amend
+	cm = commit -m
+	ch = checkout
+	b = branch
+	bd = branch -d
+	bl = branch -l
+	lg = log --online
+	last = log -1 HEAD
+	ss = "!f() { git stash show stash^{/$*} -p; }; f"
+	sa = "!f() { git stash apply stash^{/$*}; }; f"
+	sl = stash list
+	p = pull
+	pnb = "push --set-upstream origin $(git current-branch)"
+	psh = "push"
+	t = tag
+[help]
+	autocorrect = 1
+[pull]
+	ff = only
+[push]
+	default = simple
