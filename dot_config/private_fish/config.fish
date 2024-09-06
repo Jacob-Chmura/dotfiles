@@ -88,3 +88,7 @@ function fish_prompt
     set_color normal
     echo -n '| '
 end
+
+# Java 11 JDK
+set --export JAVA_HOME (dirname (dirname (readlink -f (which java))))
+set -gx PATH $JAVA_HOME $PATH
