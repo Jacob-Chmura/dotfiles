@@ -37,7 +37,7 @@ alias du0="du -sh * | sort -hr"
 alias du1="du -hxd 1 | sort -hr"
 
 # Add verbosity by default
-alias cp="cp-v"
+alias cp="cp -v"
 alias mv="mv -v"
 alias rm="rm -v"
 alias rsync="rsync -v"
