@@ -12,6 +12,8 @@ alias dow="cd $HOME/Downloads; ls"
 alias home="cd $HOME; ls"
 alias repo="cd $HOME/repo; ls"
 
+alias bat=batcat # https://github.com/sharkdp/bat/issues/982 
+
 # Type "d" to move to top parent git dir
 function d
     while test $PWD != "/"
@@ -92,3 +94,6 @@ end
 # Java 11 JDK
 set --export JAVA_HOME (dirname (dirname (readlink -f (which java))))
 set -gx PATH $JAVA_HOME $PATH
+
+# Batcat
+set -Ua fish_user_paths /usr/bin/batcat
