@@ -17,7 +17,7 @@
 	b = branch
 	bd = branch -d
 	bl = branch -l
-	lg = log --online
+	lg = log --oneline
 	last = log -1 HEAD
 	ss = "!f() { git stash show stash^{/$*} -p; }; f"
 	sa = "!f() { git stash apply stash^{/$*}; }; f"
