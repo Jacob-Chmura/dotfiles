@@ -27,10 +27,10 @@ end
 # File listing Aliases
 alias c="clear"
 
-alias l="ls -lhF"
-alias ls="ls -lhF"
-alias la="ls -lhFA"
-alias lc="ls -lhcr"
+alias l="ls -lhvF"
+alias ls="ls -lhvF"
+alias la="ls -lhvFA"
+alias lc="ls -lhvcr"
 alias ls="ls --color"
 
 # Disk usage aliases
@@ -97,3 +97,6 @@ set -gx PATH $JAVA_HOME $PATH
 
 # Batcat
 set -Ua fish_user_paths /usr/bin/batcat
+
+# Emacs
+alias em="emacsclient -c"
