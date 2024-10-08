@@ -164,3 +164,31 @@
   :config
   (ivy-prescient-mode 1))
 (setq prescient-filter-method '(literal regexp fuzzy))
+
+;; LSP-Mode Requires upgrade to emacs27.1
+;; (defun efs/lsp-mode-setup ()
+;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+;;   (lsp-headerline-breadcrumb-mode))
+
+;; (use-package lsp-mode
+;;   :commands (lsp lsp-deferred)
+;;   :hook (lsp-mode . efs/lsp-mode-setup)
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l"))
+
+;; (use-package company
+;;   :after lsp-mode
+;;   :hook (lsp-mode . company-mode)
+;;   :bind (:map company-active-map
+;;               ("<tab>" . company-complete-selection))
+;;         (:map lsp-mode-map
+;;               ("<tab>" . company-indent-or-complete-common))
+;;   :custom
+;;   (company-minimum-prefix-length 1)
+;;   (company-idle-delay 0.0))
+
+;; (use-package python-mode
+;;   :ensure nil
+;;   :hook (python-mode . lsp-deferred)
+;;   :custom
+;;   (python-shell-interpreter "python3"))
