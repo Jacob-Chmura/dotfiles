@@ -53,8 +53,8 @@
 
 (setq package-archives '(
              ("melpa-stable" . "https://stable.melpa.org/packages/")
+             ("melpa" . "https://melpa.org/packages/")
              ("elpa" . "https://elpa.gnu.org/packages/")
-
 ))
 (package-initialize)
 (unless package-archive-contents
@@ -136,6 +136,7 @@
     "ws" 'evil-window-split
     "wv" 'evil-window-vsplit
     "wc" 'evil-window-delete
+    "ww" 'delete-other-windows
     "hf" 'counsel-describe-function
     "hv" 'counsel-describe-variable
     "h." 'describe-symbol
@@ -188,8 +189,18 @@
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
 
+(use-package flycheck)
+
 (use-package python-mode
   :ensure nil
   :hook (python-mode . lsp-deferred)
   :custom
   (python-shell-interpreter "python3"))
+
+(use-package json-mode)
+(use-package yaml-mode)
+(use-package markdown-mode)
+
+(use-package lsp-java
+  :pin melpa ;; Pin to melpa since melpa-stable does not have lsp-docker dependancy
+  :after lsp)
