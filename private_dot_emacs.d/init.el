@@ -143,6 +143,7 @@
     "sd" 'counsel-rg
     "sg" 'counsel-git-grep
   ))
+(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
 
 (use-package simpleclip)
 (simpleclip-mode 1) ;; os clipboard copy paste with <s>-c/v
