@@ -48,7 +48,7 @@ alias rsync="rsync -v"
 alias upd="sudo apt update && sudo apt upgrade -y"
 
 # Start tmux session
-alias tm="tmux -f $HOME/.dotfiles/tmux/.tmux.conf"
+alias tm="tmux -f $HOME/.config/tmux/tmux.conf"
 
 # Find free ports
 alias ports="netstat -tulna"
@@ -100,3 +100,8 @@ set -Ua fish_user_paths /usr/bin/batcat
 
 # Emacs
 alias em="emacsclient -c"
+
+# Editor
+alias vi="nvim"
+alias e="nvim"
+alias vim="nvim"
