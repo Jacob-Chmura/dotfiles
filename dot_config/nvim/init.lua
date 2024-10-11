@@ -37,10 +37,13 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>bs", "<cmd>w<CR>")
-vim.keymap.set("n", "<leader>bn", "<cmd>enew<CR>")
+vim.keymap.set("n", "<leader>bc", "<cmd>enew<CR>")
+vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>")
+vim.keymap.set("n", "<leader>bp", "<cmd>bprev<CR>")
 vim.keymap.set("n", "<leader>bk", "<cmd>bd<CR>")
 vim.keymap.set("n", "<leader>bK", "<cmd>bd!<CR>")
 vim.keymap.set("n", "<leader>wq", "<cmd>wq<CR>")
+vim.keymap.set("n", "<leader>Qq", "<cmd>q!<CR>")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
