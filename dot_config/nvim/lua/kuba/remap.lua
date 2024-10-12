@@ -41,3 +41,28 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 --vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+
+-- Netrw remaps
+vim.api.nvim_create_autocmd("filetype", {
+	pattern = "netrw",
+	desc = "Better mappings for netrw",
+	callback = function()
+		local bind = function(lhs, rhs)
+			vim.keymap.set("n", lhs, rhs, { remap = true, buffer = true })
+		end
+
+		bind("h", "-^")
+		bind("l", "<CR>")
+
+		bind(".", "gH")
+
+		bind("<TAB>", "mf")
+		bind("<S-TAB>", "mF")
+		bind("<Leader><TAB>", "mu")
+
+		bind("ff", "%:w<CR>:buffer #<CR>")
+		bind("fr", "R")
+		bind("fc", "mc")
+		bind("fx", "mm")
+	end,
+})
