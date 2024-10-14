@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/repo/school ~/repo/personal ~/repo/school ~/repo/oss ~/repo/research -mindepth 1 -maxdepth 2 -type d | fzf)
+    selected=$(find ~/repo/school ~/repo/personal ~/repo/school ~/repo/oss ~/repo/research ~/.config/nvim -mindepth 1 -maxdepth 2 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
