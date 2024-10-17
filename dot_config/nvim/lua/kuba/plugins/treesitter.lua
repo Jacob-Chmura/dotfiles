@@ -1,24 +1,26 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	main = "nvim-treesitter.configs", -- Sets main module to use for opts
-	-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+	main = "nvim-treesitter.configs",
 	opts = {
 		ensure_installed = {
 			"bash",
 			"c",
+			"cpp",
 			"diff",
 			"html",
+			"java",
 			"lua",
 			"luadoc",
 			"markdown",
 			"markdown_inline",
+			"python",
 			"query",
+			"rust",
 			"vim",
 			"vimdoc",
 		},
-		-- Autoinstall languages that are not installed
-		auto_install = true,
+		auto_install = true, -- Autoinstall languages that are not installed
 		highlight = {
 			enable = true,
 			-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
