@@ -9,7 +9,7 @@ return {
 				c = { "clangtidy" },
 				cpp = { "clang-tidy" },
 				fish = { "fish" },
-				java = { "checkstyle" },
+				--java = { "checkstyle" },
 				json = { "jsonlint" },
 				markdown = { "markdownlint" },
 				python = { "Ruff" },
