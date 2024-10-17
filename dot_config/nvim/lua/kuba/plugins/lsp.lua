@@ -1,5 +1,5 @@
-local lsp_plugins =	{
-    {
+local lsp_plugins = {
+	{
 		"folke/lazydev.nvim",
 		ft = "lua",
 		opts = {
@@ -293,6 +293,6 @@ local lsp_plugins =	{
 				},
 			})
 		end,
-	}
+	},
 }
 return lsp_plugins
