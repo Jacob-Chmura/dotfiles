@@ -17,7 +17,6 @@ return {
 				vim.keymap.set(mode, l, r, opts)
 			end
 
-			-- Navigation
 			map("n", "]c", function()
 				if vim.wo.diff then
 					vim.cmd.normal({ "]c", bang = true })
@@ -53,7 +52,6 @@ return {
 				gitsigns.diffthis("@")
 			end, { desc = "git [D]iff against last commit" })
 
-			-- Toggles
 			map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "[T]oggle git show [b]lame line" })
 			map("n", "<leader>tD", gitsigns.toggle_deleted, { desc = "[T]oggle git show [D]eleted" })
 		end,

@@ -1,13 +1,8 @@
 return {
 	"mfussenegger/nvim-dap",
 	dependencies = {
-		-- Creates a beautiful debugger UI
 		"rcarriga/nvim-dap-ui",
-
-		-- Required dependency for nvim-dap-ui
 		"nvim-neotest/nvim-nio",
-
-		-- Installs the debug adapters for you
 		"williamboman/mason.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
 
@@ -18,7 +13,6 @@ return {
 		local dap = require("dap")
 		local dapui = require("dapui")
 		return {
-			-- Basic debugging keymaps, feel free to change to your liking!
 			{ "<F5>", dap.continue, desc = "Debug: Start/Continue" },
 			{ "<F1>", dap.step_into, desc = "Debug: Step Into" },
 			{ "<F2>", dap.step_over, desc = "Debug: Step Over" },
@@ -32,7 +26,7 @@ return {
 				end,
 				desc = "Debug: Set Breakpoint",
 			},
-			-- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
+			-- Toggle to see last session result.
 			{ "<F7>", dapui.toggle, desc = "Debug: See last session result." },
 			unpack(keys),
 		}
@@ -46,8 +40,6 @@ return {
 
 			-- You can provide additional configuration to the handlers,
 			handlers = {},
-
-			-- You'll need to check that you have the required things installed
 			ensure_installed = {
 				-- Update this to ensure that you have the debuggers for the langs you want
 				"delve",

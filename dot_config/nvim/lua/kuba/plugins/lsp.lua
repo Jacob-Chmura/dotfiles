@@ -119,8 +119,6 @@ local lsp_plugins = {
 							completion = {
 								callSnippet = "Replace",
 							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
 						},
 					},
 				},
@@ -148,54 +146,10 @@ local lsp_plugins = {
 			})
 		end,
 	},
-
-	{ -- Autoformat
-		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
-		cmd = { "ConformInfo" },
-		keys = {
-			{
-				"<leader>f",
-				function()
-					require("conform").format({ async = true, lsp_format = "fallback" })
-				end,
-				mode = "",
-				desc = "[F]ormat buffer",
-			},
-		},
-		opts = {
-			notify_on_error = false,
-			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't have a standardized coding style.
-				local disable_filetypes = {}
-				local lsp_format_opt
-				if disable_filetypes[vim.bo[bufnr].filetype] then
-					lsp_format_opt = "never"
-				else
-					lsp_format_opt = "fallback"
-				end
-				return {
-					timeout_ms = 500,
-					lsp_format = lsp_format_opt,
-				}
-			end,
-			formatters_by_ft = {
-				lua = { "stylua" },
-				--java = { "google-java-format" },
-				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
-				--
-				-- You can use 'stop_after_first' to run the first available formatter from the list
-				-- javascript = { "prettierd", "prettier", stop_after_first = true },
-			},
-		},
-	},
-
 	{ -- Autocompletion
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
 		dependencies = {
-			-- Snippet Engine & its associated nvim-cmp source
 			{
 				"L3MON4D3/LuaSnip",
 				build = (function()
@@ -242,7 +196,6 @@ local lsp_plugins = {
 				sources = {
 					{
 						name = "lazydev",
-						-- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
 						group_index = 0,
 					},
 					{ name = "nvim_lsp" },
