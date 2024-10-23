@@ -98,6 +98,9 @@ set -gx PATH $JAVA_HOME $PATH
 # Batcat
 set -Ua fish_user_paths /usr/bin/batcat
 
+# Bin
+set -Ua fish_user_paths /home/kuba/bin/.local/scripts/
+
 # Emacs
 alias em="emacsclient -c"
 
