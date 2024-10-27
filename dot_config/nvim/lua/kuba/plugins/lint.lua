@@ -11,7 +11,6 @@ return {
 				fish = { "fish" },
 				--java = { "checkstyle" },
 				json = { "jsonlint" },
-				markdown = { "markdownlint" },
 				python = { "Ruff" },
 				yaml = { "yamllint" },
 			}
