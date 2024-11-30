@@ -111,3 +111,4 @@ set -Ua fish_user_paths /usr/bin/vivify-linux/
 alias vi="nvim"
 alias e="nvim"
 alias vim="nvim"
+uv generate-shell-completion fish | source

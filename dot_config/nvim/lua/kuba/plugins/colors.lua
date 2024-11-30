@@ -1,12 +1,10 @@
 return {
-	"rose-pine/neovim",
-	name = "rose-pine",
+	"ellisonleao/gruvbox.nvim",
+	name = "gruvbox",
+	priority = 1000,
 	config = function()
-		require("rose-pine").setup({
+		require("gruvbox").setup({
 			disable_background = true,
-			styles = {
-				italic = false,
-			},
 		})
 		vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
