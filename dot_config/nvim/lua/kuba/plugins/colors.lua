@@ -1,12 +1,9 @@
 return {
-	"ellisonleao/gruvbox.nvim",
-	name = "gruvbox",
+	"bluz71/vim-moonfly-colors",
+	name = "moonfly",
+	lazy = false,
 	priority = 1000,
 	config = function()
-		require("gruvbox").setup({
-			disable_background = true,
-		})
-		vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+		vim.cmd.colorscheme("moonfly")
 	end,
 }

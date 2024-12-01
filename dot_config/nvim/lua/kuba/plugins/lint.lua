@@ -7,10 +7,9 @@ return {
 			lint.linters_by_ft = {
 				bash = { "bash" },
 				c = { "clangtidy" },
-				cpp = { "clang-tidy" },
+				--cpp = { "clangtidy" },
 				fish = { "fish" },
 				--java = { "checkstyle" },
-				json = { "jsonlint" },
 				python = { "ruff" },
 				yaml = { "yamllint" },
 			}
