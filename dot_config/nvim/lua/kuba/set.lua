@@ -4,10 +4,6 @@ vim.opt.signcolumn = "yes"
 
 vim.opt.showmode = false
 
-vim.schedule(function()
-	vim.opt.clipboard = "unnamedplus"
-end)
-
 vim.opt.undofile = true
 
 vim.opt.ignorecase = true
