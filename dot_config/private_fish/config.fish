@@ -101,9 +101,6 @@ set -Ua fish_user_paths /usr/bin/batcat
 # Bin
 set -Ua fish_user_paths /home/kuba/bin/.local/scripts/
 
-# Emacs
-alias em="emacsclient -c"
-
 # Vivify
 set -Ua fish_user_paths /usr/bin/vivify-linux/
 
