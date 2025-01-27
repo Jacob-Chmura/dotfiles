@@ -93,13 +93,13 @@ set --export JAVA_HOME (dirname (dirname (readlink -f (which java))))
 set -gx PATH $JAVA_HOME $PATH
 
 # Batcat
-set -Ua fish_user_paths /usr/bin/batcat
+#set -Ua fish_user_paths /usr/bin/batcat
 
 # Bin
-set -Ua fish_user_paths /home/kuba/bin/.local/scripts/
+#set -Ua fish_user_paths /home/kuba/bin/.local/scripts/
 
 # Vivify
-set -Ua fish_user_paths /usr/bin/vivify-linux/
+#set -Ua fish_user_paths /usr/bin/vivify-linux/
 
 # Editor
 alias vi="nvim"
