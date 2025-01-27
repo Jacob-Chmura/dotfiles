@@ -56,9 +56,6 @@ alias ports="netstat -tulna"
 # Get user processes
 alias procs="ps aux | grep $USER"
 
-# Get weather
-alias weather="curl -s \"wttr.in/?format=3\""
-
 # Fish cursor
 set fish_cursor_unknown block
 
@@ -108,4 +105,5 @@ set -Ua fish_user_paths /usr/bin/vivify-linux/
 alias vi="nvim"
 alias e="nvim"
 alias vim="nvim"
+
 uv generate-shell-completion fish | source
