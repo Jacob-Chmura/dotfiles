@@ -44,7 +44,6 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- Netrw remaps
 vim.api.nvim_create_autocmd("filetype", {
 	pattern = "netrw",
-	desc = "Better mappings for netrw",
 	callback = function()
 		local bind = function(lhs, rhs)
 			vim.keymap.set("n", lhs, rhs, { remap = true, buffer = true })
