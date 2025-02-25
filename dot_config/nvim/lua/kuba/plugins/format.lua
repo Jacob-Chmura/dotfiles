@@ -31,7 +31,6 @@ return {
 			sh = { "beautysh" },
 			c = { "clang-format" },
 			cpp = { "clang-format" },
-			java = { "google-java-format" },
 			lua = { "stylua" },
 			python = { "Ruff" },
 		},

@@ -1,4 +1,5 @@
-return {{
+return {
+	{
 		"bluz71/vim-moonfly-colors",
 		name = "moonfly",
 		lazy = false,
@@ -8,7 +9,7 @@ return {{
 		end,
 	},
 	{
-		"wookayin/semshi", -- use a maintained fork
+		"wookayin/semshi",
 		ft = "python",
 		build = ":UpdateRemotePlugins",
 		init = function()
@@ -18,17 +19,17 @@ return {{
 				callback = function()
 					-- Only add style, inherit or link to the LSP's colors
 					vim.cmd([[
-		    highlight! semshiGlobal gui=italic
-		    highlight! semshiImported gui=bold
-		    highlight! link semshiParameter @lsp.type.parameter
-		    highlight! link semshiParameterUnused DiagnosticUnnecessary
-		    highlight! link semshiBuiltin @function.builtin
-		    highlight! link semshiAttribute @attribute
-		    highlight! link semshiSelf @lsp.type.selfKeyword
-		    highlight! link semshiUnresolved @lsp.type.unresolvedReference
-		    ]])
+            highlight! semshiGlobal gui=italic
+            highlight! semshiImported gui=bold
+            highlight! link semshiParameter @lsp.type.parameter
+            highlight! link semshiParameterUnused DiagnosticUnnecessary
+            highlight! link semshiBuiltin @function.builtin
+            highlight! link semshiAttribute @attribute
+            highlight! link semshiSelf @lsp.type.selfKeyword
+            highlight! link semshiUnresolved @lsp.type.unresolvedReference
+            ]])
 				end,
 			})
 		end,
-	}
+	},
 }

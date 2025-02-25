@@ -12,7 +12,7 @@ vim.keymap.set("n", "<leader>bp", "<cmd>bprev<CR>")
 vim.keymap.set("n", "<leader>bk", "<cmd>bd<CR>")
 vim.keymap.set("n", "<leader>bK", "<cmd>bd!<CR>")
 vim.keymap.set("n", "<leader>wq", "<cmd>wq<CR>")
-vim.keymap.set("n", "<leader>Qq", "<cmd>q!<CR>")
+vim.keymap.set("n", "<leader>bq", "<cmd>q!<CR>")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
@@ -44,6 +44,7 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- Netrw remaps
 vim.api.nvim_create_autocmd("filetype", {
 	pattern = "netrw",
+	desc = "Better mappings for netrw",
 	callback = function()
 		local bind = function(lhs, rhs)
 			vim.keymap.set("n", lhs, rhs, { remap = true, buffer = true })
