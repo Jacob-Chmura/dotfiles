@@ -23,6 +23,9 @@ export EDITOR='nvim'
 export GREP_COLOR='1;36'
 export LSCOLORS='ExGxbEaECxxEhEhBaDaCaD'
 
+# Set Path
+export PATH="/opt/nvim-linux64/bin:$PATH"
+
 # Shell Options
 shopt -s cdspell
 shopt -s extglob
@@ -59,7 +62,7 @@ alias procs='ps aux | grep $USER'
 alias ports='netstat -tulna'
 
 alias g='git'
-alias tm='tmux -f $HOME/.config/tmux/tmux.conf'
+alias tm='tmux'
 alias upd='sudo apt update && sudo apt upgrade -y'
 
 alias grep='grep --color=auto'
