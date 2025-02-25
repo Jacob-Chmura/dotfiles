@@ -18,12 +18,6 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# Colors
-export TERM=xterm-256color
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
 # Set environment
 export EDITOR='nvim'
 export GREP_COLOR='1;36'
@@ -40,8 +34,8 @@ alias e='nvim'
 alias vi='nvim'
 alias vim='nvim'
 
-alias ..='cd..; ls'
-alias p='pwd; ls'
+alias ..='cd ..; ls'
+alias p='pwd'
 
 alias des='cd $HOME/Desktop; ls'
 alias dow='cd $HOME/Downloads; ls'
@@ -50,7 +44,7 @@ alias repo='cd $HOME/repo; ls'
 
 alias c='clear'
 alias l='ls -lhvF'
-alias ls='ls -lhvF'
+alias la='ls -lhvFA'
 
 alias du='du -h'
 alias du0='du -sh * | sort -hr'
@@ -59,14 +53,14 @@ alias du1='du -hxd 1 | sort -hr'
 alias cp='cp -v'
 alias mv='mv -v'
 alias rm='rm -v'
-alias rsync='rsync-v'
+alias rsync='rsync -v'
 
 alias procs='ps aux | grep $USER'
 alias ports='netstat -tulna'
 
 alias g='git'
 alias tm='tmux -f $HOME/.config/tmux/tmux.conf'
-alias upd='sudo apt update && suo apt upgrade -y'
+alias upd='sudo apt update && sudo apt upgrade -y'
 
 alias grep='grep --color=auto'
 alias ls='ls -p --color=auto'
@@ -80,8 +74,6 @@ COLOR256[0]=$(tput setaf 1)
 COLOR256[256]=$(tput sgr0)
 COLOR256[257]=$(tput bold)
 
-# Colors for use in PS1 that may or may not change when
-# set_prompt_colors is run
 PROMPT_COLORS=()
 
 # Change the prompt colors to a theme, themes are 0-29
@@ -105,22 +97,16 @@ set_prompt_colors() {
 }
 
 # Construct the prompt
-# [(exit code)] <user> - <hostname> <uname> <cwd> [git branch] <$|#>
+# [(exit code)] <hostname> <cwd> [git branch] <$|#>
 
 # exit code of last process
 PS1='$(ret=$?;(($ret!=0)) && echo "\[${COLOR256[0]}\]($ret) \[${COLOR256[256]}\]")'
-
-# username (red for root)
-PS1+='\[${PROMPT_COLORS[0]}\]\[${COLOR256[257]}\]$(((UID==0)) && echo "\[${COLOR256[0]}\]")\u\[${COLOR256[256]}\] - '
 
 # zonename (global zone warning)
 PS1+='\[${COLOR256[0]}\]\[${COLOR256[257]}\]'"$(zonename 2>/dev/null | grep -q '^global$' && echo 'GZ:')"'\[${COLOR256[256]}\]'
 
 # hostname
 PS1+='\[${PROMPT_COLORS[3]}\]\h '
-
-# uname
-PS1+='\[${PROMPT_COLORS[2]}\]'"$(uname | tr '[:upper:]' '[:lower:]')"' '
 
 # cwd
 PS1+='\[${PROMPT_COLORS[5]}\]\w '
@@ -144,20 +130,6 @@ _prompt_command() {
         printf "\033]0;%s%s@%s:%s\007" "$ssh" "$user" "$host" "$pwd"
 }
 PROMPT_COMMAND=_prompt_command
-
 PROMPT_DIRTRIM=6
-
-# Print all 256 colors
-colors() {
-	local i
-	for i in {0..255}; do
-		printf "\x1b[38;5;${i}mcolor %d\n" "$i"
-	done
-	tput sgr0
-}
-
-# load completion
-. /etc/bash/bash_completion 2>/dev/null ||
-	. ~/.bash_completion 2>/dev/null
 
 true

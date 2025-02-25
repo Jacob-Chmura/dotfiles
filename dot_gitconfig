@@ -9,7 +9,7 @@
 	ui = true
 [alias]
 	s = status --short --branch
-  a = add
+  	a = add
 	c = commit
 	ca = commit --amend
 	cm = commit -m
