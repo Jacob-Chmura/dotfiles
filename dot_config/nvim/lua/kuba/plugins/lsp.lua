@@ -87,7 +87,7 @@ local lsp_plugins = {
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 			local servers = {
 				bashls = {},
-				clangd = require("lsp.config.clangd"),
+				clangd = { cmd = { "clangd", "--background-index", "--clang-tidy" } },
 				ruff = {},
 				lua_ls = {
 					settings = {
