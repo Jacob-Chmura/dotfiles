@@ -12,12 +12,6 @@ return {
 		end,
 	},
 	{
-		"jannis-baum/vivify.vim", -- Markdown Preview
-		config = function()
-			vim.keymap.set("n", "<leader>mpv", ":Vivify<Cr>")
-		end,
-	},
-	{
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
