@@ -37,22 +37,17 @@ vim.api.nvim_create_autocmd("filetype", {
 	pattern = "netrw",
 	desc = "Better mappings for netrw",
 	callback = function()
-		local bind = function(lhs, rhs)
-			vim.keymap.set("n", lhs, rhs, { remap = true, buffer = true })
-		end
+		vim.keymap.set("n", "h", "-^", { remap = true, buffer = true })
+		vim.keymap.set("n", "l", "<CR>", { remap = true, buffer = true })
+		vim.keymap.set("n", "ff", "%:w<CR>:buffer #<CR>", { remap = true, buffer = true })
+	end,
+})
 
-		bind("h", "-^")
-		bind("l", "<CR>")
-
-		bind(".", "gH")
-
-		bind("<TAB>", "mf")
-		bind("<S-TAB>", "mF")
-		bind("<Leader><TAB>", "mu")
-
-		bind("ff", "%:w<CR>:buffer #<CR>")
-		bind("fr", "R")
-		bind("fc", "mc")
-		bind("fx", "mm")
+-- Highlight on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
 	end,
 })
