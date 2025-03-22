@@ -6,8 +6,8 @@ return {
 			local lint = require("lint")
 			lint.linters_by_ft = {
 				bash = { "bash" },
-				c = { "clangtidy" },
-				cpp = { "clangtidy" },
+				--c = { "clangtidy" },
+				--cpp = { "clangtidy" },
 				python = { "ruff" },
 				yaml = { "yamllint" },
 			}
