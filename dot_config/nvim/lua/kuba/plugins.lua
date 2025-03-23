@@ -56,7 +56,7 @@ return {
 				c = { "clang-format" },
 				cpp = { "clang-format" },
 				lua = { "stylua" },
-				python = { "ruff" },
+				python = { "ruff_format" },
 			},
 		},
 	},
@@ -202,23 +202,12 @@ return {
 							vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 						end
 
-						-- Jump to the definition of the word under your cursor.
 						--  To jump back, press <C-t>.
 						map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-
-						--  Jump to Declaration.
 						map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-						-- Find references for the word under your cursor.
 						map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-
-						-- Jump to the implementation of the word under your cursor.
 						map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-
-						-- Fuzzy find all the symbols in your current document.
 						map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-
-						-- Rename the variable under your cursor.
 						map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 
 						-- The following two autocommands are used to highlight references of the
@@ -253,33 +242,12 @@ return {
 								end,
 							})
 						end
-
-						-- Creates a keymap to toggle inlay hints, if the language server supports them
-						if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-							map("<leader>th", function()
-								vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-							end, "[T]oggle Inlay [H]ints")
-						end
 					end,
 				})
 
 				local capabilities = vim.lsp.protocol.make_client_capabilities()
 				capabilities =
 					vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-				local servers = {
-					bashls = {},
-					clangd = { cmd = { "clangd", "--background-index", "--clang-tidy" } },
-					ruff = {},
-					lua_ls = {
-						settings = {
-							Lua = {
-								completion = {
-									callSnippet = "Replace",
-								},
-							},
-						},
-					},
-				}
 				require("mason").setup()
 				require("mason-tool-installer").setup({
 					ensure_installed = { "bashls", "clangd", "ruff", "pyright", "lua_ls", "stylua" },
