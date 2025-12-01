@@ -1,4 +1,28 @@
 return {
+	------------------------ MASON ------------------------
+	-- Mason: Core package manager for LSP, DAP, linters, and formatters
+	{
+		"williamboman/mason.nvim",
+		cmd = "Mason", -- Define a command to open Mason's UI
+		opts = {}, -- Empty table for default options, or add custom configurations
+	},
+	-- Mason-LSPConfig: Bridge between Mason and nvim-lspconfig
+	{
+		"williamboman/mason-lspconfig.nvim",
+		-- Ensure this loads after mason.nvim and before nvim-lspconfig
+		dependencies = { "williamboman/mason.nvim" },
+		config = function()
+			require("mason-lspconfig").setup({
+				ensure_installed = { "pyright" },
+				-- Handlers for setting up LSP servers with nvim-lspconfig
+				handlers = {
+					function(server_name)
+						require("lspconfig")[server_name].setup({})
+					end,
+				},
+			})
+		end,
+	},
 	------------------------ COLORS ------------------------
 	{
 		"bluz71/vim-moonfly-colors",
@@ -184,6 +208,7 @@ return {
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
 				vim.lsp.enable("ruff")
+				vim.lsp.enable("basedpyright")
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -251,30 +276,17 @@ return {
 			"hrsh7th/nvim-cmp",
 			event = "InsertEnter",
 			dependencies = {
-				{
-					"L3MON4D3/LuaSnip",
-					build = (function()
-						-- Build Step is needed for regex support in snippets.
-						if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-							return
-						end
-						return "make install_jsregexp"
-					end)(),
-					dependencies = {},
-				},
-				"saadparwaiz1/cmp_luasnip",
+				"neovim/nvim-lspconfig",
 				"hrsh7th/cmp-nvim-lsp",
+				"hrsh7th/cmp-buffer",
 				"hrsh7th/cmp-path",
 			},
 			config = function()
 				local cmp = require("cmp")
-				local luasnip = require("luasnip")
-				luasnip.config.setup({})
-
 				cmp.setup({
 					snippet = {
 						expand = function(args)
-							luasnip.lsp_expand(args.body)
+							vim.snippet.expand(args.body)
 						end,
 					},
 					completion = { completeopt = "menu,menuone,noinsert" },
@@ -292,7 +304,6 @@ return {
 							group_index = 0,
 						},
 						{ name = "nvim_lsp" },
-						{ name = "luasnip" },
 						{ name = "path" },
 					},
 				})
@@ -300,19 +311,19 @@ return {
 		},
 
 		{
-		"ray-x/lsp_signature.nvim",
-		event = "VeryLazy",
-		opts = {},
-		config = function(_, opts)
-			-- Get signatures (and _only_ signatures) when in argument lists.
-			require "lsp_signature".setup({
-				doc_lines = 0,
-				handler_opts = {
-					border = "none"
-				},
-			})
-		end
-	},
+			"ray-x/lsp_signature.nvim",
+			event = "VeryLazy",
+			opts = {},
+			config = function(_, opts)
+				-- Get signatures (and _only_ signatures) when in argument lists.
+				require("lsp_signature").setup({
+					doc_lines = 0,
+					handler_opts = {
+						border = "none",
+					},
+				})
+			end,
+		},
 	},
 
 	------------------------ TELESCOPE ------------------------
