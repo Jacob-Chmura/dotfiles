@@ -183,7 +183,7 @@ return {
 				})
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
-				vim.lsp.enaable("ruff")
+				vim.lsp.enable("ruff")
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -298,6 +298,21 @@ return {
 				})
 			end,
 		},
+
+		{
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts)
+			-- Get signatures (and _only_ signatures) when in argument lists.
+			require "lsp_signature".setup({
+				doc_lines = 0,
+				handler_opts = {
+					border = "none"
+				},
+			})
+		end
+	},
 	},
 
 	------------------------ TELESCOPE ------------------------

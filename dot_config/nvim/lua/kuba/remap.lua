@@ -2,13 +2,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>bs", "<cmd>w<CR>")
-vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>")
-vim.keymap.set("n", "<leader>bp", "<cmd>bprev<CR>")
 vim.keymap.set("n", "<leader>bk", "<cmd>bd<CR>")
-vim.keymap.set("n", "<leader>bK", "<cmd>bd!<CR>")
-vim.keymap.set("n", "<leader>wq", "<cmd>wq<CR>")
-vim.keymap.set("n", "<leader>bq", "<cmd>q!<CR>")
+vim.keymap.set('n', '<leader>o', ':e <C-R>=expand("%:p:h") . "/" <cr>')
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
+vim.keymap.set("n", "<leader>qq", "<cmd>q!<CR>")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
@@ -16,6 +13,15 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+vim.keymap.set("n", "<up>", "<nop>")
+vim.keymap.set("n", "<down>", "<nop>")
+vim.keymap.set("i", "<up>", "<nop>")
+vim.keymap.set("i", "<down>", "<nop>")
+vim.keymap.set("i", "<left>", "<nop>")
+vim.keymap.set("i", "<right>", "<nop>")
+vim.keymap.set("n", "<left>", ":bp<cr>")
+vim.keymap.set("n", "<right>", ":bn<cr>")
 
 vim.keymap.set("i", "kj", "<Esc>")
 vim.keymap.set("i", "<C-h>", "<Left>")
