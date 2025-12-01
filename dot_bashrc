@@ -100,13 +100,14 @@ set_prompt_colors() {
 }
 
 # Construct the prompt
-# [(exit code)] <hostname> <cwd> [git branch] <$|#>
+# (exit code) [time] <hostname> <cwd> [git branch] <$|#>
 
 # exit code of last process
 PS1='$(ret=$?;(($ret!=0)) && echo "\[${COLOR256[0]}\]($ret) \[${COLOR256[256]}\]")'
 
-# zonename (global zone warning)
-PS1+='\[${COLOR256[0]}\]\[${COLOR256[257]}\]'"$(zonename 2>/dev/null | grep -q '^global$' && echo 'GZ:')"'\[${COLOR256[256]}\]'
+# time
+COLOR256[240]=$(tput setaf 240)
+PS1+='\[${COLOR256[240]}\][\A]\[${COLOR256[256]}\] '
 
 # hostname
 PS1+='\[${PROMPT_COLORS[3]}\]\h '

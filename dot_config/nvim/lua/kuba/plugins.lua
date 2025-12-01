@@ -150,90 +150,103 @@ return {
 	------------------------ LSP ------------------------
 	{
 		{
-			"folke/lazydev.nvim",
-			ft = "lua",
-			opts = {
-				library = {
-					{ path = "luvit-meta/library", words = { "vim%.uv" } },
-				},
-			},
-		},
-		{ "Bilal2453/luvit-meta", lazy = true },
-		{
 			"neovim/nvim-lspconfig",
-			dependencies = {
-				{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
-				"williamboman/mason-lspconfig.nvim",
-				"WhoIsSethDaniel/mason-tool-installer.nvim",
-				{ "j-hui/fidget.nvim", opts = {} },
-				"hrsh7th/cmp-nvim-lsp",
-			},
 			config = function()
+				-- Setup language servers.
+
+				-- Rust
+				vim.lsp.config("rust_analyzer", {
+					-- Server-specific settings. See `:help lspconfig-setup`
+					settings = {
+						["rust-analyzer"] = {
+							cargo = {
+								features = "all",
+							},
+							checkOnSave = {
+								enable = true,
+							},
+							check = {
+								command = "clippy",
+							},
+							imports = {
+								group = {
+									enable = false,
+								},
+							},
+							completion = {
+								postfix = {
+									enable = false,
+								},
+							},
+						},
+					},
+				})
+				vim.lsp.enable("rust_analyzer")
+				vim.lsp.enable("bashls")
+				vim.lsp.enaable("ruff")
+
+				-- Global mappings.
+				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+				vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
+				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
+				vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+				vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)
+
+				-- Use LspAttach autocommand to only map the following keys
+				-- after the language server attaches to the current buffer
 				vim.api.nvim_create_autocmd("LspAttach", {
-					group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-					callback = function(event)
-						local map = function(keys, func, desc, mode)
-							mode = mode or "n"
-							vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+					group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+					callback = function(ev)
+						-- Enable completion triggered by <c-x><c-o>
+						vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+
+						-- Buffer local mappings.
+						-- See `:help vim.lsp.*` for documentation on any of the below functions
+						local opts = { buffer = ev.buf }
+						vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+						vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+						vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+						vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+						vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+						vim.keymap.set("n", "<leader>wl", function()
+							print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+						end, opts)
+						--vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+						vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+						vim.keymap.set({ "n", "v" }, "<leader>a", vim.lsp.buf.code_action, opts)
+						vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+						vim.keymap.set("n", "<leader>f", function()
+							vim.lsp.buf.format({ async = true })
+						end, opts)
+
+						local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+						-- TODO: find some way to make this only apply to the current line.
+						if client.server_capabilities.inlayHintProvider then
+							vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
 						end
 
-						--  To jump back, press <C-t>.
-						map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-						map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-						map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-						map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-						map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-						map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+						-- None of this semantics tokens business.
+						-- https://www.reddit.com/r/neovim/comments/143efmd/is_it_possible_to_disable_treesitter_completely/
+						client.server_capabilities.semanticTokensProvider = nil
 
-						-- The following two autocommands are used to highlight references of the
-						-- word under your cursor when your cursor rests there for a little while.
-						-- When you move your cursor, the highlights will be cleared (the second autocommand).
-						local client = vim.lsp.get_client_by_id(event.data.client_id)
-						if
-							client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
-						then
-							local highlight_augroup =
-								vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
-							vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-								buffer = event.buf,
-								group = highlight_augroup,
-								callback = vim.lsp.buf.document_highlight,
-							})
-
-							vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-								buffer = event.buf,
-								group = highlight_augroup,
-								callback = vim.lsp.buf.clear_references,
-							})
-
-							vim.api.nvim_create_autocmd("LspDetach", {
-								group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-								callback = function(event2)
-									vim.lsp.buf.clear_references()
-									vim.api.nvim_clear_autocmds({
-										group = "kickstart-lsp-highlight",
-										buffer = event2.buf,
-									})
+						-- format on save for Rust
+						if client.server_capabilities.documentFormattingProvider then
+							vim.api.nvim_create_autocmd("BufWritePre", {
+								group = vim.api.nvim_create_augroup("RustFormat", { clear = true }),
+								buffer = bufnr,
+								callback = function()
+									vim.lsp.buf.format({ bufnr = bufnr })
 								end,
 							})
 						end
 					end,
 				})
-
-				local capabilities = vim.lsp.protocol.make_client_capabilities()
-				capabilities =
-					vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-				require("mason").setup()
-				require("mason-tool-installer").setup({
-					ensure_installed = { "bashls", "clangd", "ruff", "pyright", "lua_ls", "stylua" },
-				})
-				require("mason-lspconfig").setup()
-				require("lspconfig").bashls.setup({})
-				require("lspconfig").clangd.setup({ cmd = { "clangd", "--background-index", "--clang-tidy" } })
-				require("lspconfig").pyright.setup({})
-				require("lspconfig").lua_ls.setup({ settings = { Lua = { completion = { callSnippet = "Replace" } } } })
 			end,
 		},
+
 		{ -- Autocompletion
 			"hrsh7th/nvim-cmp",
 			event = "InsertEnter",
