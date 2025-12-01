@@ -81,22 +81,22 @@ PROMPT_COLORS=()
 
 # Change the prompt colors to a theme, themes are 0-29
 set_prompt_colors() {
-	local h=${1:-0}
-	local color=
-	local i=0
-	local j=0
-	for i in {22..231}; do
-		((i % 30 == h)) || continue
+    local h=${1:-0}
+    local color=
+    local i=0
+    local j=0
+    for i in {22..231}; do
+        ((i % 30 == h)) || continue
 
-		color=${COLOR256[$i]}
-		# cache the tput colors
-		if [[ -z $color ]]; then
-			COLOR256[$i]=$(tput setaf "$i")
-			color=${COLOR256[$i]}
-		fi
-		PROMPT_COLORS[$j]=$color
-		((j++))
-	done
+        color=${COLOR256[$i]}
+        # cache the tput colors
+        if [[ -z $color ]]; then
+            COLOR256[$i]=$(tput setaf "$i")
+            color=${COLOR256[$i]}
+        fi
+        PROMPT_COLORS[$j]=$color
+        ((j++))
+    done
 }
 
 # Construct the prompt
@@ -125,14 +125,15 @@ set_prompt_colors 24
 
 # Prompt command
 _prompt_command() {
-        local user=$USER
-        local host=${HOSTNAME%%.*}
-        local pwd=${PWD/#$HOME/\~}
-        local ssh=
-        [[ -n $SSH_CLIENT ]] && ssh='[ssh] '
-        printf "\033]0;%s%s@%s:%s\007" "$ssh" "$user" "$host" "$pwd"
+    local user=$USER
+    local host=${HOSTNAME%%.*}
+    local pwd=${PWD/#$HOME/\~}
+    local ssh=
+    [[ -n $SSH_CLIENT ]] && ssh='[ssh] '
+    printf "\033]0;%s%s@%s:%s\007" "$ssh" "$user" "$host" "$pwd"
 }
 PROMPT_COMMAND=_prompt_command
 PROMPT_DIRTRIM=6
 
 true
+source -- ~/.local/share/blesh/ble.sh

@@ -9,30 +9,6 @@ return {
 			vim.cmd.colorscheme("moonfly")
 		end,
 	},
-	{
-		"wookayin/semshi",
-		ft = "python",
-		build = ":UpdateRemotePlugins",
-		init = function()
-			-- This autocmd must be defined in init to take effect
-			vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
-				group = vim.api.nvim_create_augroup("SemanticHighlight", {}),
-				callback = function()
-					-- Only add style, inherit or link to the LSP's colors
-					vim.cmd([[
-            highlight! semshiGlobal gui=italic
-            highlight! semshiImported gui=bold
-            highlight! link semshiParameter @lsp.type.parameter
-            highlight! link semshiParameterUnused DiagnosticUnnecessary
-            highlight! link semshiBuiltin @function.builtin
-            highlight! link semshiAttribute @attribute
-            highlight! link semshiSelf @lsp.type.selfKeyword
-            highlight! link semshiUnresolved @lsp.type.unresolvedReference
-            ]])
-				end,
-			})
-		end,
-	},
 
 	------------------------ FORMAT ------------------------
 	{
@@ -155,14 +131,13 @@ return {
 				local lint = require("lint")
 				lint.linters_by_ft = {
 					bash = { "bash" },
-					--c = { "clangtidy" },
 					--cpp = { "clangtidy" },
 					python = { "ruff" },
 					yaml = { "yamllint" },
 				}
 
 				local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-				vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+				vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
 					group = lint_augroup,
 					callback = function()
 						lint.try_lint()
@@ -315,8 +290,65 @@ return {
 	------------------------ TELESCOPE ------------------------
 	{
 		"nvim-telescope/telescope.nvim",
-		event = "VimEnter",
 		branch = "0.1.x",
+		keys = {
+			{
+				"<leader>sf",
+				function()
+					require("telescope.builtin").find_files()
+				end,
+				desc = "[S]earch [F]iles",
+			},
+			{
+				"<leader>sg",
+				function()
+					require("telescope.builtin").live_grep()
+				end,
+				desc = "[S]earch by [G]rep",
+			},
+			{
+				"<leader>sd",
+				function()
+					require("telescope.builtin").diagnostics()
+				end,
+				desc = "[S]earch [D]iagnostics",
+			},
+			{
+				"<leader>s.",
+				function()
+					require("telescope.builtin").oldfiles()
+				end,
+				desc = '[S]earch Recent Files ("." for repeat)',
+			},
+			{
+				"<leader><leader>",
+				function()
+					require("telescope.builtin").buffers()
+				end,
+				desc = "[ ] Find existing buffers",
+			},
+			{
+				"<leader>/",
+				function()
+					require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+						winblend = 10,
+						previewer = false,
+					}))
+				end,
+				desc = "[/] Fuzzily search in current buffer",
+			},
+			{
+				"<leader>s/",
+				function()
+					require("telescope.builtin").live_grep({
+						grep_open_files = true,
+						prompt_title = "Live Grep in Open Files",
+					})
+				end,
+				desc = "[S]earch [/] in Open Files",
+			},
+		},
+
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
@@ -326,8 +358,9 @@ return {
 					return vim.fn.executable("make") == 1
 				end,
 			},
-			{ "nvim-telescope/telescope-ui-select.nvim" },
+			"nvim-telescope/telescope-ui-select.nvim",
 		},
+
 		config = function()
 			require("telescope").setup({
 				extensions = {
@@ -337,30 +370,9 @@ return {
 				},
 			})
 
-			-- Enable Telescope extensions if they are installed
+			-- Load extensions safely
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
-
-			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
-			vim.keymap.set("n", "<leader>/", function()
-				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
-				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
-
-			vim.keymap.set("n", "<leader>s/", function()
-				builtin.live_grep({
-					grep_open_files = true,
-					prompt_title = "Live Grep in Open Files",
-				})
-			end, { desc = "[S]earch [/] in Open Files" })
 		end,
 	},
 
@@ -373,13 +385,11 @@ return {
 			opts = {
 				ensure_installed = {
 					"bash",
-					"c",
 					"cpp",
-					"lua",
 					"markdown",
 					"python",
 				},
-				auto_install = true,
+				auto_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
 			},
@@ -408,9 +418,12 @@ return {
 		},
 		{
 			"folke/todo-comments.nvim",
-			event = "VimEnter",
+			event = "VeryLazy",
 			dependencies = { "nvim-lua/plenary.nvim" },
 			opts = { signs = false },
+			config = function()
+				require("todo-comments").setup()
+			end,
 		},
 		{ -- Collection of various small independent plugins/modules
 			"echasnovski/mini.nvim",
