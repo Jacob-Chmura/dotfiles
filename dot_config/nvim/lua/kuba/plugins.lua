@@ -208,7 +208,7 @@ return {
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
 				vim.lsp.enable("ruff")
-				vim.lsp.enable("basedpyright")
+				vim.lsp.enable("pyright")
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -240,7 +240,7 @@ return {
 						end, opts)
 						--vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
 						vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-						vim.keymap.set({ "n", "v" }, "<leader>a", vim.lsp.buf.code_action, opts)
+						vim.keymap.set({ "n", "v" }, "<leader>b", vim.lsp.buf.code_action, opts)
 						vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 						vim.keymap.set("n", "<leader>f", function()
 							vim.lsp.buf.format({ async = true })
@@ -289,7 +289,11 @@ return {
 							vim.snippet.expand(args.body)
 						end,
 					},
-					completion = { completeopt = "menu,menuone,noinsert" },
+					completion = {
+						completeopt = "menu,menuone",
+						autocomplete = { cmp.TriggerEvent.TextChanged },
+						keyword_length = 1,
+					},
 					mapping = cmp.mapping.preset.insert({
 						["<C-n>"] = cmp.mapping.select_next_item(),
 						["<C-p>"] = cmp.mapping.select_prev_item(),
