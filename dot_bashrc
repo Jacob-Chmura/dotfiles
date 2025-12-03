@@ -3,7 +3,7 @@
 
 # History management
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
+HISTSIZE=2000
 HISTFILESIZE=2000
 
 # append to the history file, don't overwrite it
@@ -100,14 +100,11 @@ set_prompt_colors() {
 }
 
 # Construct the prompt
-# (exit code) [time] <hostname> <cwd> [git branch] <$|#>
-
-# exit code of last process
-PS1='$(ret=$?;(($ret!=0)) && echo "\[${COLOR256[0]}\]($ret) \[${COLOR256[256]}\]")'
+# [time] <hostname> <cwd> [git branch] <$|#>
 
 # time
 COLOR256[240]=$(tput setaf 240)
-PS1+='\[${COLOR256[240]}\][\A]\[${COLOR256[256]}\] '
+PS1='\[${COLOR256[240]}\][\A]\[${COLOR256[256]}\] '
 
 # hostname
 PS1+='\[${PROMPT_COLORS[3]}\]\h '
@@ -136,5 +133,5 @@ _prompt_command() {
 PROMPT_COMMAND=_prompt_command
 PROMPT_DIRTRIM=6
 
-true
 source -- ~/.local/share/blesh/ble.sh
+true
