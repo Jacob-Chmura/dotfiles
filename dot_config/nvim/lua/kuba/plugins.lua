@@ -31,34 +31,15 @@ return {
 		priority = 1000,
 		config = function()
 			vim.cmd.colorscheme("moonfly")
-		end,
-	},
 
-	------------------------ FORMAT ------------------------
-	{
-		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
-		cmd = { "ConformInfo" },
-		keys = {
-			{
-				"<leader>f",
-				function()
-					require("conform").format({ async = true, lsp_format = "fallback" })
-				end,
-				mode = "",
-			},
-		},
-		opts = {
-			notify_on_error = false,
-			format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
-			formatters_by_ft = {
-				sh = { "beautysh" },
-				c = { "clang-format" },
-				cpp = { "clang-format" },
-				lua = { "stylua" },
-				python = { "ruff_format" },
-			},
-		},
+			-- Make it clearly visible which argument we're at.
+			local marked = vim.api.nvim_get_hl(0, { name = "PMenu" })
+			vim.api.nvim_set_hl(
+				0,
+				"LspSignatureActiveParameter",
+				{ fg = marked.fg, bg = marked.bg, ctermfg = marked.ctermfg, ctermbg = marked.ctermbg, bold = true }
+			)
+		end,
 	},
 
 	------------------------ FUGITIVE ------------------------
@@ -91,6 +72,7 @@ return {
 			})
 		end,
 	},
+
 	------------------------ HARPOON ------------------------
 	{
 		"theprimeagen/harpoon",
@@ -142,6 +124,33 @@ return {
 				function()
 					require("harpoon"):list():select(5)
 				end,
+			},
+		},
+	},
+
+	------------------------ FORMAT ------------------------
+	{
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		keys = {
+			{
+				"<leader>f",
+				function()
+					require("conform").format({ async = true, lsp_format = "fallback" })
+				end,
+				mode = "",
+			},
+		},
+		opts = {
+			notify_on_error = true,
+			format_on_save = { timeout_ms = 100, lsp_format = "fallback" },
+			formatters_by_ft = {
+				sh = { "beautysh" },
+				c = { "clang-format" },
+				cpp = { "clang-format" },
+				lua = { "stylua" },
+				python = { "ruff_format", "ruff_fix" },
 			},
 		},
 	},
@@ -207,7 +216,6 @@ return {
 				})
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
-				vim.lsp.enable("ruff")
 				vim.lsp.enable("pyright")
 
 				-- Global mappings.
@@ -233,12 +241,6 @@ return {
 						vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 						vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 						vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-						vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-						vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-						vim.keymap.set("n", "<leader>wl", function()
-							print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-						end, opts)
-						--vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
 						vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 						vim.keymap.set({ "n", "v" }, "<leader>b", vim.lsp.buf.code_action, opts)
 						vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
@@ -256,17 +258,6 @@ return {
 						-- None of this semantics tokens business.
 						-- https://www.reddit.com/r/neovim/comments/143efmd/is_it_possible_to_disable_treesitter_completely/
 						client.server_capabilities.semanticTokensProvider = nil
-
-						-- format on save for Rust
-						if client.server_capabilities.documentFormattingProvider then
-							vim.api.nvim_create_autocmd("BufWritePre", {
-								group = vim.api.nvim_create_augroup("RustFormat", { clear = true }),
-								buffer = bufnr,
-								callback = function()
-									vim.lsp.buf.format({ bufnr = bufnr })
-								end,
-							})
-						end
 					end,
 				})
 			end,
@@ -300,7 +291,6 @@ return {
 						["<C-b>"] = cmp.mapping.scroll_docs(-4),
 						["<C-f>"] = cmp.mapping.scroll_docs(4),
 						["<C-y>"] = cmp.mapping.confirm({ select = true }),
-						["<C-Space>"] = cmp.mapping.complete({}),
 					}),
 					sources = {
 						{
@@ -312,6 +302,60 @@ return {
 					},
 				})
 			end,
+		},
+
+		{
+			"saghen/blink.cmp",
+			-- optional: provides snippets for the snippet source
+			dependencies = { "rafamadriz/friendly-snippets" },
+
+			-- use a release tag to download pre-built binaries
+			version = "1.*",
+			-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+			-- build = 'cargo build --release',
+			-- If you use nix, you can build from source using latest nightly rust with:
+			-- build = 'nix run .#build-plugin',
+
+			---@module 'blink.cmp'
+			---@type blink.cmp.Config
+			opts = {
+				-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+				-- 'super-tab' for mappings similar to vscode (tab to accept)
+				-- 'enter' for enter to accept
+				-- 'none' for no mappings
+				--
+				-- All presets have the following mappings:
+				-- C-space: Open menu or open docs if already open
+				-- C-n/C-p or Up/Down: Select next/previous item
+				-- C-e: Hide menu
+				-- C-k: Toggle signature help (if signature.enabled = true)
+				--
+				-- See :h blink-cmp-config-keymap for defining your own keymap
+				keymap = { preset = "default" },
+
+				appearance = {
+					-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+					-- Adjusts spacing to ensure icons are aligned
+					nerd_font_variant = "mono",
+				},
+
+				-- (Default) Only show the documentation popup when manually triggered
+				completion = { documentation = { auto_show = false } },
+
+				-- Default list of enabled providers defined so that you can extend it
+				-- elsewhere in your config, without redefining it, due to `opts_extend`
+				sources = {
+					default = { "lsp", "path", "snippets", "buffer" },
+				},
+
+				-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+				-- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+				-- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+				--
+				-- See the fuzzy documentation for more information
+				fuzzy = { implementation = "prefer_rust_with_warning" },
+			},
+			opts_extend = { "sources.default" },
 		},
 
 		{
@@ -328,94 +372,112 @@ return {
 				})
 			end,
 		},
+
+		-- toml
+		"cespare/vim-toml",
+		-- yaml
+		{
+			"cuducos/yaml.nvim",
+			ft = { "yaml" },
+			dependencies = {
+				"nvim-treesitter/nvim-treesitter",
+			},
+		},
+		-- markdown
+		{
+			"plasticboy/vim-markdown",
+			ft = { "markdown" },
+			dependencies = {
+				"godlygeek/tabular",
+			},
+			config = function()
+				-- never ever fold!
+				vim.g.vim_markdown_folding_disabled = 1
+				-- support front-matter in .md files
+				vim.g.vim_markdown_frontmatter = 1
+				-- 'o' on a list item should insert at same level
+				vim.g.vim_markdown_new_list_item_indent = 0
+				-- don't add bullets when wrapping:
+				-- https://github.com/preservim/vim-markdown/issues/232
+				vim.g.vim_markdown_auto_insert_bullets = 0
+			end,
+		},
 	},
 
-	------------------------ TELESCOPE ------------------------
+	------------------------ FZF_LUA ------------------------
 	{
-		"nvim-telescope/telescope.nvim",
-		branch = "0.1.x",
-		keys = {
-			{
-				"<leader>sf",
-				function()
-					require("telescope.builtin").find_files()
-				end,
-				desc = "[S]earch [F]iles",
-			},
-			{
-				"<leader>sg",
-				function()
-					require("telescope.builtin").live_grep()
-				end,
-				desc = "[S]earch by [G]rep",
-			},
-			{
-				"<leader>sd",
-				function()
-					require("telescope.builtin").diagnostics()
-				end,
-				desc = "[S]earch [D]iagnostics",
-			},
-			{
-				"<leader>s.",
-				function()
-					require("telescope.builtin").oldfiles()
-				end,
-				desc = '[S]earch Recent Files ("." for repeat)',
-			},
-			{
-				"<leader><leader>",
-				function()
-					require("telescope.builtin").buffers()
-				end,
-				desc = "[ ] Find existing buffers",
-			},
-			{
-				"<leader>/",
-				function()
-					require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-						winblend = 10,
-						previewer = false,
-					}))
-				end,
-				desc = "[/] Fuzzily search in current buffer",
-			},
-			{
-				"<leader>s/",
-				function()
-					require("telescope.builtin").live_grep({
-						grep_open_files = true,
-						prompt_title = "Live Grep in Open Files",
-					})
-				end,
-				desc = "[S]earch [/] in Open Files",
-			},
-		},
-
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "make",
-				cond = function()
-					return vim.fn.executable("make") == 1
-				end,
-			},
-			"nvim-telescope/telescope-ui-select.nvim",
-		},
-
+		"ibhagwan/fzf-lua",
+		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
-			require("telescope").setup({
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown(),
+			require("fzf-lua").setup({
+				winopts = {
+					split = "belowright 10new",
+					preview = { hidden = true },
+				},
+				files = {
+					file_icons = false, -- file icons are distracting
+					git_icons = true, -- git icons are nice
+					_fzf_nth_devicons = true,
+				},
+				buffers = {
+					file_icons = false,
+					git_icons = true,
+				},
+				fzf_opts = {
+					["--layout"] = "default",
+				},
+				grep = {
+					rg_opts = "--color=always --smart-case --line-number --hidden --glob '!.git/*'",
+					fzf_opts = {
+						["--layout"] = "default",
 					},
 				},
 			})
 
-			-- Load extensions safely
-			pcall(require("telescope").load_extension, "fzf")
-			pcall(require("telescope").load_extension, "ui-select")
+			-- Quick file open with C-p and proximity-sort
+			vim.keymap.set("", "<C-p>", function()
+				local opts = {}
+				opts.cmd = "fd --color=never --hidden --type f --type l --exclude .git"
+				local base = vim.fn.fnamemodify(vim.fn.expand("%"), ":h:.:S")
+				if base ~= "." then
+					opts.cmd = opts.cmd .. (" | proximity-sort %s"):format(vim.fn.shellescape(vim.fn.expand("%")))
+				end
+				opts.fzf_opts = {
+					["--scheme"] = "path",
+					["--tiebreak"] = "index",
+					["--layout"] = "default",
+				}
+				require("fzf-lua").files(opts)
+			end)
+
+			-- Buffer search
+			vim.keymap.set("n", "<leader>;", function()
+				require("fzf-lua").buffers({
+					-- just show the buffer names
+					fzf_opts = {
+						["--layout"] = "default",
+						["--prompt"] = "Buffers> ",
+					},
+					-- show all buffers, even hidden
+					all_buffers = true,
+					-- preview can be turned off if distracting
+					previewer = false,
+				})
+			end)
+
+			-- Live grep / content search with rg
+			vim.keymap.set("n", "<leader>sg", function()
+				require("fzf-lua").grep_project({
+					prompt = "Rg> ",
+				})
+			end)
+
+			-- Search in current buffer
+			vim.keymap.set("n", "<leader>/", function()
+				require("fzf-lua").grep_curbuf({
+					fzf_opts = { ["--layout"] = "default" },
+				})
+			end)
 		end,
 	},
 
@@ -457,6 +519,13 @@ return {
 				local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 				local cmp = require("cmp")
 				cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+			end,
+		},
+		-- auto-cd to root of git project
+		{
+			"notjedi/nvim-rooter.lua",
+			config = function()
+				require("nvim-rooter").setup()
 			end,
 		},
 		{

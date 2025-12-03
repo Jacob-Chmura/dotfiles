@@ -1,6 +1,6 @@
 vim.opt.foldenable = false
 vim.opt.foldmethod = "manual"
-vim.opt.foldlevelstart = 99
+vim.opt.foldlevelstart = 88
 
 vim.opt.scrolloff = 10
 vim.opt.wrap = false
