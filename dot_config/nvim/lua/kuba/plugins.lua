@@ -142,13 +142,13 @@ return {
 		},
 		opts = {
 			notify_on_error = true,
-			format_on_save = { timeout_ms = 100, lsp_format = "fallback" },
+			format_on_save = { timeout_ms = 300, lsp_format = "fallback" },
 			formatters_by_ft = {
-				sh = { "beautysh" },
-				c = { "clang-format" },
-				cpp = { "clang-format" },
+				sh = { "/snap/bin/beautysh" },
+				c = { "/usr/bin/clang-format" },
+				cpp = { "/usr/bin/clang-format" },
 				lua = { "stylua" },
-				python = { "ruff_format", "ruff_fix" },
+				python = { "ruff", "ruff_fix" },
 			},
 		},
 	},
