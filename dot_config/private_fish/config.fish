@@ -7,6 +7,7 @@ abbr -a yr 'cal -y'
 abbr -a m make
 abbr -a o xdg-open
 
+abbr -a ee exit
 abbr -a g git
 abbr -a gc 'git checkout'
 abbr -a gs 'git status --short --branch'
