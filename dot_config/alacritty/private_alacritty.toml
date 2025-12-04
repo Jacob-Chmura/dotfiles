@@ -1,0 +1,4 @@
+[terminal]
+[terminal.shell]
+args = ["-l"]
+program = "/usr/bin/fish"
