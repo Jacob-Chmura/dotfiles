@@ -133,5 +133,4 @@ _prompt_command() {
 PROMPT_COMMAND=_prompt_command
 PROMPT_DIRTRIM=6
 
-source -- ~/.local/share/blesh/ble.sh
 true
