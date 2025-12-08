@@ -135,6 +135,7 @@ PROMPT_DIRTRIM=6
 
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib:${LD_LIBRARY_PATH:-}"
 
 # Auto-launch fish if interactive shell
 if command -v fish >/dev/null 2>&1; then
