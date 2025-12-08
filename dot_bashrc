@@ -133,4 +133,12 @@ _prompt_command() {
 PROMPT_COMMAND=_prompt_command
 PROMPT_DIRTRIM=6
 
-true
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Auto-launch fish if interactive shell
+if command -v fish >/dev/null 2>&1; then
+    case "$-" in
+        *i*) exec fish ;;
+    esac
+fi

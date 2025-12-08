@@ -11,7 +11,7 @@ return {
 		dependencies = { "williamboman/mason.nvim" },
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "pyright" },
+				ensure_installed = { "pyright", "bashls", "rust_analyzer" },
 				-- Handlers for setting up LSP servers with nvim-lspconfig
 				handlers = {
 					function(server_name)
