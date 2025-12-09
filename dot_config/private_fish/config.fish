@@ -110,9 +110,26 @@ function fish_greeting
     echo
 
     # --- IP (first non-loopback IPv4) ---
-    set -l ip (ip -4 addr show scope global 2>/dev/null | awk '/inet /{print $2; exit}' | cut -d/ -f1)
+    # Try ip command (may live in /sbin or /usr/sbin)
+    set -l ip_cmd (command -v ip)
+    if test -z "$ip_cmd"
+        # Try typical root/sbin paths
+        if test -x /usr/sbin/ip
+    	set ip_cmd /usr/sbin/ip
+        else if test -x /sbin/ip
+    	set ip_cmd /sbin/ip
+        end
+    end
+    
+    if test -n "$ip_cmd"
+        set -l ip ($ip_cmd -4 addr show scope global 2>/dev/null | awk '/inet /{print $2; exit}' | cut -d/ -f1)
+    else
+        set -l ip ""
+    end
+    
+    # Fallback to hostname -I
     if test -z "$ip"
-        set ip "no-ip"
+        set ip (hostname -I 2>/dev/null | awk '{print $1}')
     end
 
     # --- Disk (usedGi totalGi percent) ---

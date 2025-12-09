@@ -137,9 +137,7 @@ PROMPT_DIRTRIM=6
 export PATH="$HOME/.local/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/.local/lib:${LD_LIBRARY_PATH:-}"
 
-# Auto-launch fish if interactive shell
-if command -v fish >/dev/null 2>&1; then
-    case "$-" in
-        *i*) exec fish ;;
-    esac
+# Auto-launch Fish for interactive shells
+if [[ $- == *i* ]]; then
+    exec fish
 fi
