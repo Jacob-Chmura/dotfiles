@@ -136,8 +136,3 @@ PROMPT_DIRTRIM=6
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/.local/lib:${LD_LIBRARY_PATH:-}"
-
-# Auto-launch Fish for interactive shells
-if [[ $- == *i* ]]; then
-    exec fish
-fi
