@@ -40,37 +40,6 @@ return {
 		end,
 	},
 
-	------------------------ FUGITIVE ------------------------
-	{
-		"tpope/vim-fugitive",
-		config = function()
-			vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
-
-			local Kuba_Fugitive = vim.api.nvim_create_augroup("Kuba_Fugitive", {})
-			local autocmd = vim.api.nvim_create_autocmd
-			autocmd("BufWinEnter", {
-				group = Kuba_Fugitive,
-				pattern = "*",
-				callback = function()
-					if vim.bo.ft ~= "fugitive" then
-						return
-					end
-
-					local bufnr = vim.api.nvim_get_current_buf()
-					local opts = { buffer = bufnr, remap = false }
-					vim.keymap.set("n", "<leader>p", function()
-						vim.cmd.Git("push")
-					end, opts)
-
-					vim.keymap.set("n", "<leader>P", ":Git pull --rebase <CR>", opts)
-					vim.keymap.set("n", "<leader>l", ":Git lg<CR>", opts)
-					vim.keymap.set("n", "<leader>tr", ":Git tr<CR>", opts)
-					vim.keymap.set("n", "<leader>t", ":Git push -u origin ", opts)
-				end,
-			})
-		end,
-	},
-
 	------------------------ HARPOON ------------------------
 	{
 		"theprimeagen/harpoon",
@@ -162,7 +131,7 @@ return {
 				local lint = require("lint")
 				lint.linters_by_ft = {
 					bash = { "bash" },
-					--cpp = { "clangtidy" },
+					cpp = { "clangtidy" },
 					python = { "ruff" },
 					yaml = { "yamllint" },
 				}
@@ -215,6 +184,20 @@ return {
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
 				vim.lsp.enable("pyright")
+
+				vim.lsp.config("clangd", {
+					cmd = {
+						"clangd",
+						"--background-index",
+						"--clang-tidy",
+						"--completion-style=detailed",
+						"--header-insertion=never",
+						"--query-driver=/usr/bin/c++",
+						"--compile-commands-dir=build",
+					},
+				})
+
+				vim.lsp.enable("clangd")
 
 				-- Global mappings.
 				-- See `:help vim.diagnostic.*` for documentation on any of the below functions

@@ -242,4 +242,5 @@ install_alacritty
 install_npm
 install_fish # Must be last to not mess up bash-style exports from previous installs
 
+# TODO: Install lazygit
 echo "[✓] Bootstrap complete! Source ~./bashrc"
