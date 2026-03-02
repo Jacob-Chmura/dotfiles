@@ -2,17 +2,16 @@ return {
 	------------------------ MASON ------------------------
 	{
 		"williamboman/mason.nvim",
-		cmd = "Mason", -- Define a command to open Mason's UI
-		opts = {}, -- Empty table for default options, or add custom configurations
+		cmd = "Mason",
+		opts = {},
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
 		-- Ensure this loads after mason.nvim and before nvim-lspconfig
-		dependencies = { "williamboman/mason.nvim" },
+		dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "pyright", "bashls", "rust_analyzer" },
-				-- Handlers for setting up LSP servers with nvim-lspconfig
+				ensure_installed = { "pyright", "bashls", "rust_analyzer", "clangd" },
 				handlers = {
 					function(server_name)
 						require("lspconfig")[server_name].setup({})
@@ -30,7 +29,12 @@ return {
 		config = function()
 			vim.cmd.colorscheme("moonfly")
 
-			-- Make it clearly visible which argument we're at.
+			local bg = "#181818"
+			local groups = { "Normal", "NormalNC", "SignColumn", "LineNr", "FoldColumn", "CursorLine", "CursorColumn" }
+			for _, group in ipairs(groups) do
+				vim.api.nvim_set_hl(0, group, { bg = bg })
+			end
+
 			local marked = vim.api.nvim_get_hl(0, { name = "PMenu" })
 			vim.api.nvim_set_hl(
 				0,
@@ -45,54 +49,33 @@ return {
 		"theprimeagen/harpoon",
 		branch = "harpoon2",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("harpoon"):setup()
+		keys = function()
+			local keys = {
+				{
+					"<leader>a",
+					function()
+						require("harpoon"):list():add()
+					end,
+				},
+				{
+					"<C-e>",
+					function()
+						local h = require("harpoon")
+						h.ui:toggle_quick_menu(h:list())
+					end,
+				},
+			}
+			for i = 1, 5 do
+				table.insert(keys, {
+					"<leader>" .. i,
+					function()
+						require("harpoon"):list():select(i)
+					end,
+				})
+			end
+			return keys
 		end,
-		keys = {
-			{
-				"<leader>a",
-				function()
-					require("harpoon"):list():add()
-				end,
-			},
-			{
-				"<C-e>",
-				function()
-					local harpoon = require("harpoon")
-					harpoon.ui:toggle_quick_menu(harpoon:list())
-				end,
-			},
-			{
-				"<leader>1",
-				function()
-					require("harpoon"):list():select(1)
-				end,
-			},
-			{
-				"<leader>2",
-				function()
-					require("harpoon"):list():select(2)
-				end,
-			},
-			{
-				"<leader>3",
-				function()
-					require("harpoon"):list():select(3)
-				end,
-			},
-			{
-				"<leader>4",
-				function()
-					require("harpoon"):list():select(4)
-				end,
-			},
-			{
-				"<leader>5",
-				function()
-					require("harpoon"):list():select(5)
-				end,
-			},
-		},
+		config = true,
 	},
 
 	------------------------ FORMAT ------------------------
@@ -113,7 +96,7 @@ return {
 			notify_on_error = true,
 			format_on_save = { timeout_ms = 300, lsp_format = "fallback" },
 			formatters_by_ft = {
-				sh = { "/snap/bin/beautysh" },
+				sh = { "/usr/bin/beautysh" },
 				c = { "/usr/bin/clang-format" },
 				cpp = { "/usr/bin/clang-format" },
 				lua = { "stylua" },
@@ -152,11 +135,8 @@ return {
 		{
 			"neovim/nvim-lspconfig",
 			config = function()
-				-- Setup language servers.
-
 				-- Rust
 				vim.lsp.config("rust_analyzer", {
-					-- Server-specific settings. See `:help lspconfig-setup`
 					settings = {
 						["rust-analyzer"] = {
 							cargo = {
@@ -184,7 +164,6 @@ return {
 				vim.lsp.enable("rust_analyzer")
 				vim.lsp.enable("bashls")
 				vim.lsp.enable("pyright")
-
 				vim.lsp.config("clangd", {
 					cmd = {
 						"clangd",
@@ -196,11 +175,8 @@ return {
 						"--compile-commands-dir=build",
 					},
 				})
-
 				vim.lsp.enable("clangd")
 
-				-- Global mappings.
-				-- See `:help vim.diagnostic.*` for documentation on any of the below functions
 				vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 				vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
@@ -215,7 +191,6 @@ return {
 						vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
 						-- Buffer local mappings.
-						-- See `:help vim.lsp.*` for documentation on any of the below functions
 						local opts = { buffer = ev.buf }
 						vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 						vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -228,17 +203,6 @@ return {
 						vim.keymap.set("n", "<leader>f", function()
 							vim.lsp.buf.format({ async = true })
 						end, opts)
-
-						local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-						-- TODO: find some way to make this only apply to the current line.
-						if client.server_capabilities.inlayHintProvider then
-							vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
-						end
-
-						-- None of this semantics tokens business.
-						-- https://www.reddit.com/r/neovim/comments/143efmd/is_it_possible_to_disable_treesitter_completely/
-						client.server_capabilities.semanticTokensProvider = nil
 					end,
 				})
 			end,
@@ -246,84 +210,24 @@ return {
 
 		{
 			"saghen/blink.cmp",
-			-- optional: provides snippets for the snippet source
 			dependencies = { "rafamadriz/friendly-snippets" },
-
-			-- use a release tag to download pre-built binaries
 			version = "1.*",
-
-			---@module 'blink.cmp'
-			---@type blink.cmp.Config
 			opts = {
-				-- All presets have the following mappings:
 				-- C-space: Open menu or open docs if already open
 				-- C-n/C-p or Up/Down: Select next/previous item
 				-- C-e: Hide menu
 				-- C-k: Toggle signature help (if signature.enabled = true)
 				keymap = { preset = "default" },
 				appearance = {
-					-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 					nerd_font_variant = "mono",
 				},
-
-				-- (Default) Only show the documentation popup when manually triggered
-				completion = { documentation = { auto_show = false } },
-
-				-- Default list of enabled providers defined so that you can extend it
-				-- elsewhere in your config, without redefining it, due to `opts_extend`
+				signature = { enabled = true },
 				sources = {
 					default = { "lsp", "path", "snippets", "buffer" },
 				},
-
-				-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-				-- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-				-- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
 				fuzzy = { implementation = "prefer_rust_with_warning" },
 			},
 			opts_extend = { "sources.default" },
-		},
-		{
-			"ray-x/lsp_signature.nvim",
-			event = "VeryLazy",
-			opts = {},
-			config = function(_, opts)
-				-- Get signatures (and _only_ signatures) when in argument lists.
-				require("lsp_signature").setup({
-					doc_lines = 0,
-					handler_opts = {
-						border = "none",
-					},
-				})
-			end,
-		},
-
-		-- toml / yaml
-		"cespare/vim-toml",
-		{
-			"cuducos/yaml.nvim",
-			ft = { "yaml" },
-			dependencies = {
-				"nvim-treesitter/nvim-treesitter",
-			},
-		},
-		-- markdown
-		{
-			"plasticboy/vim-markdown",
-			ft = { "markdown" },
-			dependencies = {
-				"godlygeek/tabular",
-			},
-			config = function()
-				-- never ever fold!
-				vim.g.vim_markdown_folding_disabled = 1
-				-- support front-matter in .md files
-				vim.g.vim_markdown_frontmatter = 1
-				-- 'o' on a list item should insert at same level
-				vim.g.vim_markdown_new_list_item_indent = 0
-				-- don't add bullets when wrapping:
-				-- https://github.com/preservim/vim-markdown/issues/232
-				vim.g.vim_markdown_auto_insert_bullets = 0
-			end,
 		},
 	},
 
@@ -411,12 +315,7 @@ return {
 			build = ":TSUpdate",
 			main = "nvim-treesitter.configs",
 			opts = {
-				ensure_installed = {
-					"bash",
-					"cpp",
-					"markdown",
-					"python",
-				},
+				ensure_installed = { "bash", "cpp", "markdown", "python", "toml", "yaml", "json", "lua" },
 				auto_install = false,
 				highlight = { enable = true },
 				indent = { enable = true },
@@ -434,17 +333,6 @@ return {
 	{
 		"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 		{
-			"windwp/nvim-autopairs",
-			event = "InsertEnter",
-			dependencies = { "hrsh7th/nvim-cmp" },
-			config = function()
-				require("nvim-autopairs").setup({})
-				local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-				local cmp = require("cmp")
-				cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-			end,
-		},
-		{
 			"notjedi/nvim-rooter.lua",
 			config = function()
 				require("nvim-rooter").setup()
@@ -455,16 +343,13 @@ return {
 			event = "VeryLazy",
 			dependencies = { "nvim-lua/plenary.nvim" },
 			opts = { signs = false },
-			config = function()
-				require("todo-comments").setup()
-			end,
 		},
-		{ -- Collection of various small independent plugins/modules
+		{
 			"echasnovski/mini.nvim",
 			config = function()
-				-- Better Around/Inside textobjects
 				require("mini.ai").setup({ n_lines = 500 })
 				require("mini.surround").setup()
+				require("mini.pairs").setup()
 			end,
 		},
 	},

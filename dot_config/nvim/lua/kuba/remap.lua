@@ -4,7 +4,6 @@ vim.g.maplocalleader = " "
 vim.keymap.set("n", ";", ":")
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>bk", "<cmd>bd<CR>")
 vim.keymap.set("n", "<leader>o", ':e <C-R>=expand("%:p:h") . "/" <cr>')
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
 
@@ -69,24 +68,5 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 				vim.cmd('exe "normal! g\'\\""')
 			end
 		end
-	end,
-})
-
--- MoonFly Override background
-local custom_highlight = vim.api.nvim_create_augroup("CustomHighlight", {})
-
-vim.api.nvim_create_autocmd("ColorScheme", {
-	pattern = "moonfly",
-	group = custom_highlight,
-	callback = function()
-		local bg = "#181818"
-
-		vim.api.nvim_set_hl(0, "Normal", { bg = bg })
-		vim.api.nvim_set_hl(0, "NormalNC", { bg = bg })
-		vim.api.nvim_set_hl(0, "SignColumn", { bg = bg })
-		vim.api.nvim_set_hl(0, "LineNr", { bg = bg })
-		vim.api.nvim_set_hl(0, "FoldColumn", { bg = bg })
-		vim.api.nvim_set_hl(0, "CursorLine", { bg = bg })
-		vim.api.nvim_set_hl(0, "CursorColumn", { bg = bg })
 	end,
 })
