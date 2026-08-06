@@ -1,0 +1,62 @@
+# ==============================================================================
+# Requirements & Dependencies
+# ==============================================================================
+# OS:        Linux (X11/Wayland with compositor support for opacity/blur)
+# Shell:     zsh
+# Font:      Iosevka Fixed (or Iosevka Fixed Nerd Font for glyphs)
+
+# ==============================================================================
+# Environment & Shell
+# ==============================================================================
+
+[terminal]
+shell = { program = "/usr/bin/env", args = ["zsh", "-l", "-c", "tmux attach-session || tmux new-session"] }
+
+# ==============================================================================
+# Window Aesthetics (Modern & Minimal)
+# ==============================================================================
+
+[window]
+opacity = 0.6
+blur = true
+
+# ==============================================================================
+# Typography
+# ==============================================================================
+
+[font]
+size = 12.0
+
+[font.normal]
+family = "Iosevka Fixed"
+style = "Regular"
+
+[font.bold]
+family = "Iosevka Fixed"
+style = "Bold"
+
+[font.italic]
+family = "Iosevka Fixed"
+style = "Italic"
+
+[font.bold_italic]
+family = "Iosevka Fixed"
+style = "Bold Italic"
+
+# ==============================================================================
+# Color Palette
+# ==============================================================================
+
+#[colors.primary]
+#background = "#ffdaba" # warm peachpuff background
+#foreground = "#241211" # dark text contrast
+#
+#[colors.normal]
+#black   = "#241211"
+#red     = "#8b0000"
+#green   = "#006400"
+#yellow  = "#808000"
+#blue    = "#00008b"
+#magenta = "#8b008b"
+#cyan    = "#008b8b"
+#white   = "#dfcfbf"
