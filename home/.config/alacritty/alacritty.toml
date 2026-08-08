@@ -42,21 +42,3 @@ style = "Italic"
 [font.bold_italic]
 family = "Iosevka Fixed"
 style = "Bold Italic"
-
-# ==============================================================================
-# Color Palette
-# ==============================================================================
-
-#[colors.primary]
-#background = "#ffdaba" # warm peachpuff background
-#foreground = "#241211" # dark text contrast
-#
-#[colors.normal]
-#black   = "#241211"
-#red     = "#8b0000"
-#green   = "#006400"
-#yellow  = "#808000"
-#blue    = "#00008b"
-#magenta = "#8b008b"
-#cyan    = "#008b8b"
-#white   = "#dfcfbf"
