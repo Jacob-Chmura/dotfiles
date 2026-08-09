@@ -78,6 +78,9 @@ in
     feh
     nerd-fonts.iosevka-term
     picom
+
+    # Applications
+    google-chrome
   ];
 
   # Enable Fontconfig for user-installed fonts
@@ -100,6 +103,7 @@ in
   # ==============================================================================
 
   home.file = {
+    "repo/.keep".text = "";
     ".wallpaper.jpg".source = wallpaper;
     ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.gitconfig";
     ".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.tmux.conf";
