@@ -9,11 +9,6 @@
 let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
 
-  wallpaper = pkgs.fetchurl {
-    url = "https://unsplash.com/photos/g30P1zcOzXo/download?force=true";
-    hash = "sha256-ju465dAE4AemXXwuggyv6OstR6OfaT4zQS91Q/x2f6E=";
-  };
-
   # Instantiate nixGL using your flake's pkgs directly
   nixGLPkgs = import "${nixgl}/default.nix" { inherit pkgs; };
   nixGLPkg = nixGLPkgs.auto.nixGLDefault;
@@ -104,7 +99,7 @@ in
 
   home.file = {
     "repo/.keep".text = "";
-    ".wallpaper.jpg".source = wallpaper;
+    ".wallpaper.jpg".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/assets/wallpaper.jpg";
     ".gitconfig".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.gitconfig";
     ".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.tmux.conf";
     ".zshrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.zshrc";
